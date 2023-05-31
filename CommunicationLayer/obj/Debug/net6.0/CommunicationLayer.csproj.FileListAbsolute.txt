@@ -1,0 +1,12 @@
+E:\Progra Concurrente\CommunicationLayer\bin\Debug\net6.0\CommunicationLayer.deps.json
+E:\Progra Concurrente\CommunicationLayer\bin\Debug\net6.0\CommunicationLayer.dll
+E:\Progra Concurrente\CommunicationLayer\bin\Debug\net6.0\CommunicationLayer.pdb
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.csproj.AssemblyReference.cache
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.GeneratedMSBuildEditorConfig.editorconfig
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.AssemblyInfoInputs.cache
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.AssemblyInfo.cs
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.csproj.CoreCompileInputs.cache
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.dll
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\refint\CommunicationLayer.dll
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\CommunicationLayer.pdb
+E:\Progra Concurrente\CommunicationLayer\obj\Debug\net6.0\ref\CommunicationLayer.dll

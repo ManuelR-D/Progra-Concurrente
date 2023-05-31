@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StartupServicesManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="CarritoAPI_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="CarritoBackend_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="CarritoBackend_PartitionCount" DefaultValue="1" />
+    <Parameter Name="CarritoBackend_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="CarritoBackend_LowKey" DefaultValue="0" />
+    <Parameter Name="CarritoBackend_HighKey" DefaultValue="2" />
+  </Parameters>
+  <Services>
+    <!-- La sección siguiente crea instancias de tipos de servicio cuando se crea una 
+         instancia de este tipo de aplicación. También puede crear una o varias instancias de tipo de servicio 
+         usando el módulo ServiceFabric de PowerShell.
+
+         El atributo ServiceTypeName siguiente debe coincidir con el nombre definido en el archivo ServiceManifest.xml importado. -->
+    <Service Name="CarritoAPI" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="CarritoAPIType" InstanceCount="[CarritoAPI_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="CarritoBackend" ServicePackageActivationMode="ExclusiveProcess">
+      <StatefulService ServiceTypeName="CarritoBackendType" TargetReplicaSetSize="[CarritoBackend_TargetReplicaSetSize]" MinReplicaSetSize="[CarritoBackend_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[CarritoBackend_PartitionCount]" LowKey="[CarritoBackend_LowKey]" HighKey="[CarritoBackend_HighKey]" />
+      </StatefulService>
+    </Service>
+  </Services>
+</StartupServicesManifest>

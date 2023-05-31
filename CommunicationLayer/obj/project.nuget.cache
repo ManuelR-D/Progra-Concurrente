@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "iBBkrHFzHE0+11cu09zcDhS2Xrf0lyx6gDu8MocnYUv/f66st2Eimgq8QbW9g0ds/5BzThbyxPAPZ72S7FGOuQ==",
+  "success": true,
+  "projectFilePath": "E:\\Progra Concurrente\\CommunicationLayer\\CommunicationLayer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric\\9.1.1799\\microsoft.servicefabric.9.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.data\\6.1.1799\\microsoft.servicefabric.data.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.data.extensions\\6.1.1799\\microsoft.servicefabric.data.extensions.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.data.interfaces\\6.1.1799\\microsoft.servicefabric.data.interfaces.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.diagnostics.internal\\6.1.1799\\microsoft.servicefabric.diagnostics.internal.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.fabrictransport.internal\\6.1.1799\\microsoft.servicefabric.fabrictransport.internal.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.services\\6.1.1799\\microsoft.servicefabric.services.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\microsoft.servicefabric.services.remoting\\6.1.1799\\microsoft.servicefabric.services.remoting.6.1.1799.nupkg.sha512",
+    "C:\\Users\\manue\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}
