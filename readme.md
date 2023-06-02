@@ -1,8 +1,9 @@
 # Instrucciones para ejecutar localmente
 ## Requisitos
 1. [Service Fabric Runtime](https://learn.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started)
-  1.1 El ejecutable del Service Fabric Runtime se tiene que ejecutar desde una consola con el argumento /accepteula.
-	Por ejemplo desde cmd: `C:\Users\Foo\Downloads\ServiceFabricRuntime.exe /accepteula`
+    * El ejecutable del Service Fabric Runtime se tiene que ejecutar desde una consola con el argumento /accepteula
+    
+      Por ejemplo desde cmd: `C:\Users\Foo\Downloads\ServiceFabricRuntime.exe /accepteula`
 2. [Service Fabric SDK](https://learn.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started) (requiere el Runtime ya instalado)
 3. [Visual Studio Community 2022](https://visualstudio.microsoft.com/es/). La instalacion por defecto ya trae todas las dependencias necesarias (ASP .NET)
 4. [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
