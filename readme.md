@@ -1,7 +1,7 @@
 # Instrucciones para ejecutar localmente
 ## Requisitos
 1. [Service Fabric Runtime](https://learn.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started)
-    * El ejecutable del Service Fabric Runtime se tiene que ejecutar desde una consola con el argumento /accepteula
+    * El instalable del Service Fabric Runtime se tiene que ejecutar desde una consola con el argumento /accepteula
     
       Por ejemplo desde cmd: `C:\Users\Foo\Downloads\ServiceFabricRuntime.exe /accepteula`
 2. [Service Fabric SDK](https://learn.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started) (requiere el Runtime ya instalado)
