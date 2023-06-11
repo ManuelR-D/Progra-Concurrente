@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Fabric;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using CommunicationLayer;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace CarritoBackend
 {
@@ -50,20 +46,29 @@ namespace CarritoBackend
 
         public async Task<bool> ProcessPurchase(List<Product> products)
         {
-            var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, int>>("ProductStock");
-            using (var tx = this.StateManager.CreateTransaction())
+            try
             {
-                foreach (Product product in products)
+                var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, int>>("ProductStock");
+                using (var tx = this.StateManager.CreateTransaction())
                 {
-                    var result = await myDictionary.TryGetValueAsync(tx, product.Name);
+                    foreach (Product product in products)
+                    {
+                        var result = await myDictionary.TryGetValueAsync(tx, product.Name, LockMode.Update);
 
-                    if (!result.HasValue || result.HasValue && result.Value < product.Quantity)
-                        return false;
+                        if (!result.HasValue || result.HasValue && result.Value < product.Quantity)
+                        {
+                            return false;
+                        }
 
-                    await myDictionary.TryUpdateAsync(tx, product.Name, result.Value - product.Quantity, result.Value);
+                        await myDictionary.TryUpdateAsync(tx, product.Name, result.Value - product.Quantity, result.Value);
+                    }
+
+                    await tx.CommitAsync();
                 }
-
-                await tx.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                ServiceEventSource.Current.Write(ex.Message);
             }
             return true;
         }
@@ -91,6 +96,8 @@ namespace CarritoBackend
             //       o quite este reemplazo de RunAsync si no es necesario en su servicio.
 
             var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, int>>("ProductStock");
+            var info = (Int64RangePartitionInformation)this.Partition.PartitionInfo;
+            var lowKey = info.LowKey;
 
             while (true)
             {
@@ -102,23 +109,30 @@ namespace CarritoBackend
                     var resultCoca = await myDictionary.TryGetValueAsync(tx, "CocaCola");
                     var resultNote = await myDictionary.TryGetValueAsync(tx, "Notebook");
 
-                    ServiceEventSource.Current.ServiceMessage(this.Context, "Pan {0}; Coca {1}; Note {2}",
-                        resultPan.HasValue ? resultPan.Value.ToString() : "Value does not exist.",
-                        resultCoca.HasValue ? resultCoca.Value.ToString() : "Value does not exist.",
-                        resultNote.HasValue ? resultNote.Value.ToString() : "Value does not exist.");
-
+                    switch(lowKey)
+                    {
+                        case 0:
+                            ServiceEventSource.Current.ServiceMessage(this.Context, "Pan {0}", resultPan.HasValue ? resultPan.Value.ToString() : "Value does not exist.");
+                            break;
+                        case 1:
+                            ServiceEventSource.Current.ServiceMessage(this.Context, "Coca {0}", resultCoca.HasValue ? resultCoca.Value.ToString() : "Value does not exist.");
+                            break;
+                        case 2:
+                            ServiceEventSource.Current.ServiceMessage(this.Context, "Note {0}", resultNote.HasValue ? resultNote.Value.ToString() : "Value does not exist.");
+                            break;
+                    }
                     if (!resultPan.HasValue)
-                        await myDictionary.SetAsync(tx, "Pan", 10);
+                        await myDictionary.SetAsync(tx, "Pan", 100);
                     if (!resultCoca.HasValue)
-                        await myDictionary.SetAsync(tx, "CocaCola", 10);
+                        await myDictionary.SetAsync(tx, "CocaCola", 100);
                     if (!resultNote.HasValue)
-                        await myDictionary.SetAsync(tx, "Notebook", 10);
+                        await myDictionary.SetAsync(tx, "Notebook", 100);
                     // Si se produce una excepción antes de llamar a CommitAsync, se anula la transacción, se descartan todos los cambios
                     // y no se guarda nada en las réplicas secundarias.
                     await tx.CommitAsync();
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }
         }
     }

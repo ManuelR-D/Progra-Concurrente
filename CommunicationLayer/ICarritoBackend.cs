@@ -2,10 +2,16 @@
 
 namespace CommunicationLayer
 {
-    public interface ICarritoBackend : IService
+    public interface IServiceProductWorker : IService
+    {
+        Task<bool> ProcessPurchase(List<Product> products);
+    }
+    public interface IServiceProductVerifier : IService
+    {
+        Task<bool> IsEnoughStock(List<Product> prodcuts);
+    }
+    public interface ICarritoBackend : IServiceProductWorker, IServiceProductVerifier
     {
         Task<string> GetServiceDetails();
-        Task<bool> IsEnoughStock(List<Product> products);
-        Task<bool> ProcessPurchase(List<Product> products);
     }
 }

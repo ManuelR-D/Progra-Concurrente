@@ -4,6 +4,6 @@
     <Parameter Name="CarritoAPI_InstanceCount" Value="1" />
     <Parameter Name="CarritoBackend_PartitionCount" Value="3" />
     <Parameter Name="CarritoBackend_MinReplicaSetSize" Value="1" />
-    <Parameter Name="CarritoBackend_TargetReplicaSetSize" Value="2" />
+    <Parameter Name="CarritoBackend_TargetReplicaSetSize" Value="1" />
   </Parameters>
 </StartupServices>
