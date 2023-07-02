@@ -72,7 +72,11 @@ namespace CarritoAPI.WorkloadDistributor
             for(int partitionId = 0; partitionId < distributedPurchaseCartsByIndex.Count; partitionId++)
             {
                 IList<Product> products = distributedPurchaseCartsByIndex[partitionId];
-                
+
+                // Esto crea una conexión al proceso que está ejecutando el servicio "TServiceInPartition". Por ejemplo, CarritoBackend.
+                //  se puede usar para llamar a métodos de forma remota.
+                // En nuestro caso tenemos varios procesos pesados ejecutando el servicio CarritoBackend, por lo que tenemos que especificar
+                //  un "ServicePartitionKey". Ahora estamos usando un índice de 0...n para obtener el proceso indicado
                 var clusterPartition = ServiceProxy.Create<TServiceInPartition>(SERVICE_URI, new ServicePartitionKey(partitionId));
                 microServices.Add(clusterPartition);
                 switch (op)
@@ -120,18 +124,14 @@ namespace CarritoAPI.WorkloadDistributor
             where TServiceInPartition : IServiceProductWorker
         {
             Guid transactionId = Guid.NewGuid();
-            try
+            for (int partitionId = 0; partitionId < participants; partitionId++)
             {
-
-                for (int partitionId = 0; partitionId < participants; partitionId++)
-                {
-                    var clusterPartition = ServiceProxy.Create<TServiceInPartition>(SERVICE_URI, new ServicePartitionKey(partitionId));
-                    await clusterPartition.AddPurchaseTransaction(transactionId);
-                }
-            }
-            catch(Exception ex) 
-            {
-                
+                // Esto crea una conexión al proceso que está ejecutando el servicio "TServiceInPartition". Por ejemplo, CarritoBackend.
+                //  se puede usar para llamar a métodos de forma remota.
+                // En nuestro caso tenemos varios procesos pesados ejecutando el servicio CarritoBackend, por lo que tenemos que especificar
+                //  un "ServicePartitionKey". Ahora estamos usando un índice de 0...n para obtener el proceso indicado
+                var clusterPartition = ServiceProxy.Create<TServiceInPartition>(SERVICE_URI, new ServicePartitionKey(partitionId));
+                await clusterPartition.AddPurchaseTransaction(transactionId);
             }
 
 

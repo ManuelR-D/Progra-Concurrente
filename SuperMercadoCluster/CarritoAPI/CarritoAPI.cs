@@ -82,7 +82,7 @@ namespace CarritoAPI
 
         /// <summary>
         /// Un nodo nos notifica si tiene o no suficiente stock para procesar la transaccion con id "transactionId".
-        ///  Cada vez que seamos notificados bajamos un semaforo asociado a esa transacción.
+        /// Cada vez que seamos notificados bajamos un semaforo asociado a esa transacción por el cual debería estar esperando ProductWorkloadDistributor
         /// </summary>
         /// <param name="transactionid">La transaccion verificada</param>
         /// <param name="result">El resultado de la verificacion</param>

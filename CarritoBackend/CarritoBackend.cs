@@ -94,6 +94,9 @@ namespace CarritoBackend
             var txResult = false;
             try
             {
+                // Esto obtiene una conexión al proceso que está ejecutando el serviccio que implemente "ICarritoAPI". Se puede usar para 
+                //  llamar a métodos de dicho objeto de forma remota. Como ICarritoAPI es un Stateless Service, no es necesario indicar el
+                //  id del proceso, puesto que de haber más de uno todos deberían ser indistintos y Service Fabric devuelve uno aleatorio.
                 var apiService = ServiceProxy.Create<ICarritoAPI>(serviceUri);
 
                 using (var tx = this.StateManager.CreateTransaction())
