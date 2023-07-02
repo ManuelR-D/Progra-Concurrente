@@ -7,9 +7,9 @@ Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "SupermercadoCluster", "Supe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarritoBackend", "..\CarritoBackend\CarritoBackend.csproj", "{8B63CC93-7BF6-4A2D-83D3-684921A53640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarritoAPI", "CarritoAPI\CarritoAPI.csproj", "{FCA2E0AB-C5B3-4E99-986E-DF6DB2CA7BE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarritoAPI", "CarritoAPI\CarritoAPI.csproj", "{FCA2E0AB-C5B3-4E99-986E-DF6DB2CA7BE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationLayer", "..\CommunicationLayer\CommunicationLayer.csproj", "{A3C0C799-9C6C-4A5C-BA8B-7603506B47A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationLayer", "..\CommunicationLayer\CommunicationLayer.csproj", "{A3C0C799-9C6C-4A5C-BA8B-7603506B47A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
