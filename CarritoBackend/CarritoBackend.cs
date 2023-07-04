@@ -108,7 +108,7 @@ namespace CarritoBackend
                     //No tenemos suficiente stock, avisamos a API y abortamos
                     if (!isEnoughStock) { apiService.NotifyStockTransactionState(transactionId, false); tx.Abort(); }
 
-                    //Tenemos stock de todos los productos, notificamos que podriamos continuar y esperamos respuesta del servidor
+                    //Tenemos stock de todos los productos, notificamos que podriamos continuar
                     ServiceEventSource.Current.ServiceMessage(this.Context, $"Tengo stock para txID: {transactionId}");
                     await apiService.NotifyStockTransactionState(transactionId, true);
 
