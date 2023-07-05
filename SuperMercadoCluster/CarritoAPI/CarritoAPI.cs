@@ -1,23 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.Fabric;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using Microsoft.ServiceFabric.Data;
+using CommunicationLayer;
+using CarritoAPI.WorkloadDistributor;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 
 namespace CarritoAPI
 {
     /// <summary>
     /// FabricRuntime crea una instancia de esta clase para cada instancia de tipo de servicio.
     /// </summary>
-    internal sealed class CarritoAPI : StatelessService
+    internal sealed class CarritoAPI : StatelessService, ICarritoAPI
     {
         public CarritoAPI(StatelessServiceContext context)
             : base(context)
@@ -29,7 +25,8 @@ namespace CarritoAPI
         /// <returns>La colección de clientes de escucha.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[]
+            var listener = this.CreateServiceRemotingInstanceListeners().ToList();
+            var defaultListener =  new ServiceInstanceListener[]
             {
                 new ServiceInstanceListener(serviceContext =>
                     new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
@@ -70,6 +67,41 @@ namespace CarritoAPI
 
                     }))
             };
+            listener.Add(defaultListener[0]);
+            listener.Add(new ServiceInstanceListener(serviceContext =>
+            new FabricTransportServiceRemotingListener(
+                serviceContext,
+                this,
+                new FabricTransportRemotingListenerSettings
+                {
+                    ExceptionSerializationTechnique = FabricTransportRemotingListenerSettings.ExceptionSerialization.Default,
+                }),
+             "ServiceEndpointV2"));
+            return listener;
+        }
+
+        /// <summary>
+        /// Un nodo nos notifica si tiene o no suficiente stock para procesar la transaccion con id "transactionId".
+        /// Cada vez que seamos notificados bajamos un semaforo asociado a esa transacción por el cual debería estar esperando ProductWorkloadDistributor
+        /// </summary>
+        /// <param name="transactionid">La transaccion verificada</param>
+        /// <param name="result">El resultado de la verificacion</param>
+        /// <returns>Una tarea que sigue el progreso de la función</returns>
+        public async Task NotifyStockTransactionState(Guid transactionid, bool result)
+        {
+            Tuple<CountdownEvent, CancellationTokenSource> controlBlock = ProductWorkloadDistributor.pendingTransactions[transactionid];
+            var pendingClustersSemaphore = controlBlock.Item1;
+            if (result)
+            {
+                pendingClustersSemaphore.Signal();
+                ServiceEventSource.Current.ServiceMessage(this.Context, $"API: Bajo cde, queda en {pendingClustersSemaphore.CurrentCount}");
+            }
+            else
+            {
+                //Algun nodo fallo su transaccion
+                ServiceEventSource.Current.ServiceMessage(this.Context, $"API: Fallo un nodo. Cancelamos el semaforo asociado a tx {transactionid}");
+                controlBlock.Item2.Cancel();
+            }
         }
     }
 }
