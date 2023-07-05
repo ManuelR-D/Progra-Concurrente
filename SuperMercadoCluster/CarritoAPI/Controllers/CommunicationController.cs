@@ -21,26 +21,6 @@ namespace CarritoAPI.Controllers
             { "Tecno", 2 },
         };
 
-
-        /// <summary>
-        /// Get the service details executing in the partition id provided
-        /// </summary>
-        /// <param name="partitionId">Partition id of the service</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("backendcluster")]
-        public async Task<string> BackendClusterGet(int partitionId)
-        {
-            if (partitionId > mapCategoryToPartition.Count)
-            {
-                return $"No existe la particion. Este cluster solo tiene {mapCategoryToPartition.Count} particiones";
-            }
-            var clusterProxy = ServiceProxy.Create<ICarritoBackend>(serviceUri, new ServicePartitionKey(partitionId));
-            var serviceName = await clusterProxy.GetServiceDetails();
-
-            return serviceName;
-        }
-
         /// <summary>
         /// Get the partition that is handling the category provided
         /// </summary>
